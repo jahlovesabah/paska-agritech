@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Paska Agritech</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <img class="logo" th:src="@{/img/logo.svg}" alt="Paska Agritech" />
+        <div>
+          <h1>Paska Agritech</h1>
+          <div class="sub">Plataforma de monitoreo telemetrico agricola - Peru 2026</div>
+        </div>
+      </div>
+      <div class="userbox">
+        <span>Hola, <strong th:text="${session.usuario}">admin</strong></span>
+        <a th:href="@{/logout}" class="logout">Cerrar sesion</a>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/monitoreo}">Monitoreo</a>
+    <a th:href="@{/consulta}">Consola de Consultas</a>
+    <a th:href="@{/agricultor}">Agricultores</a>
+    <a th:href="@{/concurrencia}">Concurrencia</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <h2>Tecnologia que cuida cada parcela</h2>
+      <p>Plataforma modular y concurrente que procesa datos de sensores IoT en tiempo real para anticipar sequias, plagas y fallas de bateria en el campo peruano.</p>
+      <div th:if="${conectado}" class="badge ok-badge">● Base de datos conectada</div>
+      <div th:unless="${conectado}" class="badge warn-badge">● Modo demostracion (sin BD)</div>
+      <a th:href="@{/monitoreo}" class="btn">Ver monitoreo</a>
+    </div>
+    <div class="hero-art">
+      <img th:src="@{/img/field.svg}" alt="Campo agricola con sensores IoT" />
+    </div>
+  </section>
+
+  <div class="container">
+    <h2 class="section-title">Modulos del sistema</h2>
+    <div class="modules">
+      <a th:href="@{/monitoreo}" class="module-card">
+        <svg viewBox="0 0 64 64" width="52" height="52"><circle cx="32" cy="32" r="30" fill="#e8f5e9"/><path d="M16 40 a16 16 0 0 1 32 0" fill="none" stroke="#2e7d32" stroke-width="4"/><line x1="32" y1="40" x2="42" y2="28" stroke="#1b5e20" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="40" r="3" fill="#1b5e20"/></svg>
+        <h3>Monitoreo</h3>
+        <p>Inventario de parcelas y sensores con alertas de bateria critica.</p>
+      </a>
+      <a th:href="@{/consulta}" class="module-card">
+        <svg viewBox="0 0 64 64" width="52" height="52"><rect x="6" y="12" width="52" height="40" rx="6" fill="#e8f5e9"/><rect x="6" y="12" width="52" height="10" rx="6" fill="#a5d6a7"/><path d="M16 34 l6 5 l-6 5" fill="none" stroke="#1b5e20" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><line x1="28" y1="44" x2="42" y2="44" stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/></svg>
+        <h3>Consola de Consultas</h3>
+        <p>Consulta el estado de tus parcelas y sensores con comandos simples.</p>
+      </a>
+      <a th:href="@{/agricultor}" class="module-card">
+        <svg viewBox="0 0 64 64" width="52" height="52"><circle cx="32" cy="32" r="30" fill="#e8f5e9"/><circle cx="32" cy="25" r="9" fill="#2e7d32"/><path d="M16 50 a16 14 0 0 1 32 0 Z" fill="#43a047"/></svg>
+        <h3>Agricultores</h3>
+        <p>Registra y administra a los agricultores de la plataforma.</p>
+      </a>
+      <a th:href="@{/concurrencia}" class="module-card">
+        <svg viewBox="0 0 64 64" width="52" height="52"><circle cx="32" cy="32" r="30" fill="#e8f5e9"/><rect x="16" y="20" width="32" height="6" rx="3" fill="#2e7d32"/><rect x="16" y="29" width="24" height="6" rx="3" fill="#43a047"/><rect x="16" y="38" width="28" height="6" rx="3" fill="#66bb6a"/></svg>
+        <h3>Concurrencia</h3>
+        <p>Procesa grandes volumenes de datos telemetricos y genera alertas.</p>
+      </a>
+    </div>
+  </div>
+  <footer>Paska Agritech &copy; 2026 - Proyecto academico</footer>
+</body>
+</html>

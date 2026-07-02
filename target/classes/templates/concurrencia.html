@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Procesamiento - Paska Agritech</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <img class="logo" th:src="@{/img/logo.svg}" alt="Paska Agritech" />
+        <div>
+          <h1>Paska Agritech</h1>
+          <div class="sub">Procesamiento de datos telemetricos</div>
+        </div>
+      </div>
+      <div class="userbox">
+        <span>Hola, <strong th:text="${session.usuario}">admin</strong></span>
+        <a th:href="@{/logout}" class="logout">Cerrar sesion</a>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/monitoreo}">Monitoreo</a>
+    <a th:href="@{/consulta}">Consola de Consultas</a>
+    <a th:href="@{/agricultor}">Agricultores</a>
+    <a th:href="@{/concurrencia}">Concurrencia</a>
+  </nav>
+  <div class="container">
+    <div class="card">
+      <h2>Simulacion de procesamiento masivo</h2>
+      <div class="help">Genera registros telemetricos, mide el tiempo de procesamiento y calcula estadisticas y alertas del campo.</div>
+      <form th:action="@{/concurrencia}" method="post">
+        <div class="grid">
+          <div><label>Cantidad de registros</label><input name="registros" type="number" value="10000"></div>
+          <div><label>Procesos en paralelo</label><input name="hilos" type="number" value="5"></div>
+        </div>
+        <button class="btn" type="submit">Ejecutar</button>
+      </form>
+    </div>
+
+    <div class="card" th:if="${tiempoCon != null}">
+      <h2>Resultados</h2>
+      <div class="grid">
+        <div class="metric"><div class="v" th:text="${registros}"></div><div class="l">Registros procesados</div></div>
+        <div class="metric"><div class="v" th:text="${tiempoSec} + ' ms'"></div><div class="l">Tiempo modo simple</div></div>
+        <div class="metric"><div class="v" th:text="${tiempoCon} + ' ms'"></div><div class="l">Tiempo optimizado</div></div>
+        <div class="metric"><div class="v" th:text="${mejora} + '%'"></div><div class="l">Reduccion de tiempo</div></div>
+        <div class="metric"><div class="v" th:text="${totalAlertas}"></div><div class="l">Alertas generadas</div></div>
+        <div class="metric"><div class="v" th:text="${promHumedad} + '%'"></div><div class="l">Humedad promedio</div></div>
+        <div class="metric"><div class="v" th:text="${bateriaCritica}"></div><div class="l">Sensores con bateria baja</div></div>
+      </div>
+    </div>
+  </div>
+  <footer>Paska Agritech &copy; 2026</footer>
+</body>
+</html>

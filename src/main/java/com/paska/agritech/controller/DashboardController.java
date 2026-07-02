@@ -48,7 +48,9 @@ public class DashboardController {
     // ---- VISTA: Panel principal ----
     @GetMapping("/")
     public String inicio(Model model) {
-        model.addAttribute("conectado", ConexionBD.getInstancia().estaConectada());
+        ConexionBD bd = ConexionBD.getInstancia();
+        bd.getConexion(); // reintenta la conexion si estaba caida (Neon dormido)
+        model.addAttribute("conectado", bd.estaConectada());
         return "index";
     }
 

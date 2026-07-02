@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agricultores - Paska Agritech</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <img class="logo" th:src="@{/img/logo.svg}" alt="Paska Agritech" />
+        <div>
+          <h1>Paska Agritech</h1>
+          <div class="sub">Gestion de agricultores</div>
+        </div>
+      </div>
+      <div class="userbox">
+        <span>Hola, <strong th:text="${session.usuario}">admin</strong></span>
+        <a th:href="@{/logout}" class="logout">Cerrar sesion</a>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/monitoreo}">Monitoreo</a>
+    <a th:href="@{/consulta}">Consola de Consultas</a>
+    <a th:href="@{/agricultor}">Agricultores</a>
+    <a th:href="@{/concurrencia}">Concurrencia</a>
+  </nav>
+  <div class="container">
+    <div class="card">
+      <h2>Registrar agricultor</h2>
+      <div th:if="${ok}" class="ok" th:text="${ok}"></div>
+      <div th:if="${error}" class="error" th:text="${error}"></div>
+      <form th:action="@{/agricultor}" method="post">
+        <div class="grid">
+          <div><label>Nombre</label><input name="nombre" required></div>
+          <div><label>Apellido</label><input name="apellido" required></div>
+          <div><label>DNI (8 digitos)</label><input name="dni" required></div>
+          <div><label>Telefono (9XXXXXXXX)</label><input name="telefono" required></div>
+        </div>
+        <label>Correo</label><input name="correo" type="text" required>
+        <button class="btn" type="submit">Registrar</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Agricultores registrados</h2>
+      <table>
+        <tr><th>ID</th><th>Nombre completo</th><th>DNI</th><th>Telefono</th><th>Correo</th></tr>
+        <tr th:each="a : ${agricultores}">
+          <td th:text="${a.idAgricultor}"></td>
+          <td th:text="${a.nombreCompleto}"></td>
+          <td th:text="${a.dni}"></td>
+          <td th:text="${a.telefono}"></td>
+          <td th:text="${a.correo}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(agricultores)}"><td colspan="5">Sin registros por el momento.</td></tr>
+      </table>
+    </div>
+  </div>
+  <footer>Paska Agritech &copy; 2026</footer>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Monitoreo - Paska Agritech</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <img class="logo" th:src="@{/img/logo.svg}" alt="Paska Agritech" />
+        <div>
+          <h1>Paska Agritech</h1>
+          <div class="sub">Monitoreo de parcelas y sensores IoT</div>
+        </div>
+      </div>
+      <div class="userbox">
+        <span>Hola, <strong th:text="${session.usuario}">admin</strong></span>
+        <a th:href="@{/logout}" class="logout">Cerrar sesion</a>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/monitoreo}">Monitoreo</a>
+    <a th:href="@{/consulta}">Consola de Consultas</a>
+    <a th:href="@{/agricultor}">Agricultores</a>
+    <a th:href="@{/concurrencia}">Concurrencia</a>
+  </nav>
+  <div class="container">
+    <div class="card">
+      <h2>Resumen</h2>
+      <div class="grid">
+        <div class="metric"><div class="v" th:text="${totalParcelas}"></div><div class="l">Parcelas activas</div></div>
+        <div class="metric"><div class="v" th:text="${totalSensores}"></div><div class="l">Sensores activos</div></div>
+        <div class="metric"><div class="v" th:text="${totalAlertas}"></div><div class="l">Sensores con bateria baja</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Parcelas</h2>
+      <table>
+        <tr><th>ID</th><th>Agricultor</th><th>Ubicacion</th><th>Hectareas</th></tr>
+        <tr th:each="p : ${parcelas}">
+          <td th:text="${p.idParcela}"></td>
+          <td th:text="${p.idAgricultor}"></td>
+          <td th:text="${p.ubicacion}"></td>
+          <td th:text="${p.hectareas}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(parcelas)}"><td colspan="4">Sin parcelas por el momento.</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Sensores</h2>
+      <table>
+        <tr><th>ID</th><th>Parcela</th><th>Tipo</th><th>Bateria (%)</th></tr>
+        <tr th:each="s : ${sensores}">
+          <td th:text="${s.idSensor}"></td>
+          <td th:text="${s.idParcela}"></td>
+          <td th:text="${s.tipoSensor}"></td>
+          <td th:text="${s.bateria}" th:style="${s.bateria < 50} ? 'color:#c62828;font-weight:700' : ''"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(sensores)}"><td colspan="4">Sin sensores por el momento.</td></tr>
+      </table>
+    </div>
+  </div>
+  <footer>Paska Agritech &copy; 2026</footer>
+</body>
+</html>

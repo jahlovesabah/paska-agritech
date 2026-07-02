@@ -1,0 +1,19 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paska Agritech">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#43a047"/>
+      <stop offset="1" stop-color="#1b5e20"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#g)"/>
+  <!-- hoja -->
+  <path d="M32 50 C32 30 20 24 16 15 C34 18 42 30 32 50 Z" fill="#c8e6c9"/>
+  <path d="M32 50 C32 27 44 21 49 13 C36 17 28 30 32 50 Z" fill="#ffffff"/>
+  <line x1="32" y1="50" x2="32" y2="30" stroke="#1b5e20" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- senal IoT -->
+  <g stroke="#a5d6a7" stroke-width="2.4" fill="none" opacity=".95">
+    <path d="M45 40 q6 6 0 14"/>
+    <path d="M50 36 q11 11 0 22"/>
+  </g>
+  <circle cx="45" cy="47" r="2.4" fill="#fff"/>
+</svg>

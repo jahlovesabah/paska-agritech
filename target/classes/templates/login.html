@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ingresar - Paska Agritech</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/img/favicon.svg}">
+</head>
+<body class="login-body">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-art">
+        <img class="logo" th:src="@{/img/logo.svg}" alt="Paska Agritech" />
+        <h1>Paska Agritech</h1>
+        <p>Monitoreo telemetrico de parcelas agricolas</p>
+      </div>
+
+      <form class="login-form" th:action="@{/login}" method="post">
+        <h2>Iniciar sesion</h2>
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+
+        <label>Usuario</label>
+        <input name="usuario" autocomplete="username" placeholder="admin" required autofocus>
+
+        <label>Contrasena</label>
+        <input name="clave" type="password" autocomplete="current-password" placeholder="admin" required>
+
+        <button class="btn btn-block" type="submit">Ingresar</button>
+        <p class="login-hint">Credenciales de acceso: <code>admin</code> / <code>admin</code></p>
+      </form>
+    </div>
+    <p class="login-foot">Paska Agritech &copy; 2026</p>
+  </div>
+</body>
+</html>

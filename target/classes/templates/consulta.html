@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Consulta - Paska Agritech</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <img class="logo" th:src="@{/img/logo.svg}" alt="Paska Agritech" />
+        <div>
+          <h1>Paska Agritech</h1>
+          <div class="sub">Consola de consultas del sistema</div>
+        </div>
+      </div>
+      <div class="userbox">
+        <span>Hola, <strong th:text="${session.usuario}">admin</strong></span>
+        <a th:href="@{/logout}" class="logout">Cerrar sesion</a>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/monitoreo}">Monitoreo</a>
+    <a th:href="@{/consulta}">Consola de Consultas</a>
+    <a th:href="@{/agricultor}">Agricultores</a>
+    <a th:href="@{/concurrencia}">Concurrencia</a>
+  </nav>
+  <div class="container">
+    <div class="card">
+      <h2>Consultar informacion de parcelas y sensores</h2>
+      <div class="help">
+        <strong>Formato:</strong>
+        <code>COMANDO METRICA DE (PARCELA|SENSOR) NUMERO [DONDE VALOR &lt;op&gt; NUMERO]</code><br>
+        Comandos: <code>CONSULTAR</code>, <code>MONITOREAR</code>, <code>ALERTAR</code> &middot;
+        Metricas: <code>HUMEDAD</code>, <code>TEMPERATURA</code>, <code>BATERIA</code><br>
+        Ejemplos:
+        <code>CONSULTAR HUMEDAD DE PARCELA 1</code> &nbsp;|&nbsp;
+        <code>ALERTAR TEMPERATURA DE PARCELA 2 DONDE VALOR &gt; 35</code>
+      </div>
+      <form th:action="@{/consulta}" method="post">
+        <label>Escribe tu consulta:</label>
+        <textarea name="texto" th:text="${entrada}" placeholder="CONSULTAR HUMEDAD DE PARCELA 1 DONDE VALOR < 30"></textarea>
+        <button class="btn" type="submit">Ejecutar</button>
+      </form>
+    </div>
+
+    <div class="card" th:if="${resultado != null}">
+      <div th:if="${resultado.exito}">
+        <h2>Consulta valida</h2>
+        <div class="ok">
+          Consulta interpretada: <code th:text="${resultado.consultaInterpretada}"></code>
+        </div>
+      </div>
+      <div th:unless="${resultado.exito}">
+        <h2>La consulta tiene errores</h2>
+        <div class="error" th:each="e : ${resultado.errores}" th:text="${e}"></div>
+      </div>
+    </div>
+  </div>
+  <footer>Paska Agritech &copy; 2026</footer>
+</body>
+</html>

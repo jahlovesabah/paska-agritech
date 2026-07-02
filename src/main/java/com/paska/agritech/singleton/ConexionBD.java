@@ -15,10 +15,12 @@ import java.sql.SQLException;
  * previniendo el agotamiento rapido de memoria en el servidor.
  *
  * LECTURA DE CREDENCIALES (despliegue seguro en Render + Neon):
- *  - Lee la variable de entorno DATABASE_URL. Acepta dos formatos:
+ *  - Opcion A (recomendada): variables separadas
+ *      DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, DB_SSL
+ *  - Opcion B: variable unica DATABASE_URL, que acepta:
  *      a) Cadena nativa de Neon:  postgresql://usuario:clave@host/bd?sslmode=require
  *      b) Cadena JDBC:            jdbc:postgresql://host/bd?...   (+ DB_USER / DB_PASSWORD)
- *  - Si no hay variable de entorno, usa una BD PostgreSQL local por defecto.
+ *  - Si no hay ninguna variable, usa una BD PostgreSQL local por defecto.
  *
  * NUNCA se escriben credenciales en el codigo fuente: provienen del entorno.
  */
@@ -76,7 +78,11 @@ public final class ConexionBD {
     }
 
     public boolean estaConectada() {
-        return conexion != null;
+        try {
+            return conexion != null && conexion.isValid(3);
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     /**
@@ -84,11 +90,34 @@ public final class ConexionBD {
      * Soporta el formato nativo de Neon (postgresql://) y el formato JDBC.
      */
     private String[] resolverConfiguracion() {
-        String env = obtenerEnv("DATABASE_URL");
         String user = obtenerEnv("DB_USER");
         String pass = obtenerEnv("DB_PASSWORD");
 
-        // Caso 1: sin variable de entorno -> PostgreSQL local por defecto.
+        // Caso 1 (recomendado en Render): variables separadas DB_HOST, DB_PORT,
+        // DB_NAME, DB_USER, DB_PASSWORD, DB_SSL.
+        String host = obtenerEnv("DB_HOST");
+        if (host != null && !host.isBlank()) {
+            String port = obtenerEnv("DB_PORT");
+            String name = obtenerEnv("DB_NAME");
+            String ssl = obtenerEnv("DB_SSL");
+            if (port == null || port.isBlank()) port = "5432";
+            if (name == null || name.isBlank()) name = "neondb";
+            boolean usarSsl = ssl == null || ssl.isBlank()
+                    || ssl.equalsIgnoreCase("true") || ssl.equals("1")
+                    || ssl.equalsIgnoreCase("require") || ssl.equalsIgnoreCase("yes");
+            String jdbc = String.format("jdbc:postgresql://%s:%s/%s?sslmode=%s",
+                    host, port, name, usarSsl ? "require" : "disable");
+            return new String[]{
+                    jdbc,
+                    user != null ? user : "postgres",
+                    pass != null ? pass : ""
+            };
+        }
+
+        // Caso 2: variable unica DATABASE_URL (Neon nativa o JDBC).
+        String env = obtenerEnv("DATABASE_URL");
+
+        // Sin ninguna variable -> PostgreSQL local por defecto.
         if (env == null || env.isBlank()) {
             return new String[]{
                     "jdbc:postgresql://localhost:5432/PaskaAgritech_DB",
@@ -97,7 +126,7 @@ public final class ConexionBD {
             };
         }
 
-        // Caso 2: formato nativo de Neon (postgresql:// o postgres://).
+        // Formato nativo de Neon (postgresql:// o postgres://).
         if (env.startsWith("postgresql://") || env.startsWith("postgres://")) {
             try {
                 URI uri = new URI(env);
@@ -117,7 +146,7 @@ public final class ConexionBD {
             }
         }
 
-        // Caso 3: ya viene en formato JDBC.
+        // DATABASE_URL ya viene en formato JDBC.
         return new String[]{
                 env,
                 user != null ? user : "postgres",

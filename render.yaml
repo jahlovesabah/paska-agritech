@@ -1,6 +1,5 @@
 # =================================================================
-#  Blueprint de Render para Paska Agritech
-#  Despliega la app como servicio web Docker.
+#  Blueprint de Render para Paska Agritech (servicio web Docker).
 #  La base de datos PostgreSQL se aloja en Neon (externa).
 # =================================================================
 services:
@@ -12,9 +11,17 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     autoDeployTrigger: commit
-    healthCheckPath: /
+    healthCheckPath: /login
     envVars:
-      # Cadena de conexion de Neon. Se solicita en el panel de Render
-      # (no se guarda en el repositorio).
-      - key: DATABASE_URL
+      - key: DB_HOST
         sync: false
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSL
+        value: "true"
